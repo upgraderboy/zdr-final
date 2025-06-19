@@ -334,7 +334,7 @@ export default function ProfileForm({ profile, isPending }: FormSectionProps) {
                                         <SelectContent>
                                             <SelectItem value="MALE">Male</SelectItem>
                                             <SelectItem value="FEMALE">Female</SelectItem>
-                                            <SelectItem value="Rather Not Say">Rather Not Say</SelectItem>
+                                            <SelectItem value="Other">Other</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormDescription>Select your gender</FormDescription>

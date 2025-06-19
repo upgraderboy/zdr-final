@@ -81,7 +81,7 @@ export function JobCard({ job, onApply, onRemoveApplication }: JobCardProps) {
                     <span>{[job.stateName, job.countryName].filter(Boolean).join(", ")}</span>
                   </div>
                 )}
-                {job.isRemote && (
+                {job.jobType === "Remote" && (
                   <Badge variant="secondary" className="text-xs">
                     Remote
                   </Badge>

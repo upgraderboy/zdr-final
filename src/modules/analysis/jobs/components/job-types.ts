@@ -3,6 +3,7 @@ export type ExperienceLevel = "Entry Level" | "Mid Level" | "Senior Level"
 export type GenderPreference = "Male" | "Female" | "All"
 export type AgeCategory = "up to 20" | "21-30" | "31-40" | "41-50" | "51-60" | "60 and up"
 export type DomainType = "TECH" | "NON-TECH" | "FINANCE" | "HEALTHCARE" | "MARKETING" | "EDUCATION"
+export type JobType = "Remote" | "On Site" | "Hybrid"
 
 export interface JobData {
   id: string
@@ -14,7 +15,7 @@ export interface JobData {
   hardSkills: string[]
   salaryRange: string | null
   genderPreference: GenderPreference
-  isRemote: boolean
+  jobType: JobType
   stateName: string | null
   countryName: string | null
   companyName: string | null
@@ -29,7 +30,7 @@ export interface AnalyticsFilters {
   contractType?: ContractType[]
   experienceLevel?: ExperienceLevel[]
   genderPreference?: GenderPreference[]
-  isRemote?: boolean[]
+  jobType?: JobType[]
   isDisabilityAllowed?: boolean[]
   domainType?: DomainType[]
   salaryRange?: string[]

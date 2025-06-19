@@ -64,7 +64,7 @@ export interface Company {
     hardSkills: string[]
     salaryRange?: string
     genderPreference: GenderPreference
-    isRemote: boolean
+    jobType: "Remote" | "On Site" | "Hybrid"
     stateName?: string
     countryName?: string
     companyName: string

@@ -13,7 +13,7 @@ export const positionGenderEnum = pgEnum("gender_preference", ["Male", "Female",
 export const ageCategoryEnum = pgEnum("age_category", ["up to 20", "21-30", "31-40", "41-50", "51-60", "60 and up"]);
 export const applicationStatusEnum = pgEnum("application_status", ["PENDING", "SHORTLISTED", "HIRED", "REJECTED"]);
 export const domainTypeEnum = pgEnum("domain_type", ["TECH", "NON-TECH"]);
-
+export const jobTypeEnum = pgEnum("job_type", ["Remote", "On Site", "Hybrid"]);
 export const candidates = pgTable("candidates", {
     id: uuid("id").primaryKey().defaultRandom(),
     clerkId: varchar("clerk_id", { length: 255 }).unique().notNull(),
@@ -144,7 +144,8 @@ export const jobs = pgTable("jobs", {
     // skillsRequired: json("skills_required").$type<string[]>().default(sql`'[]'::json`).notNull(), // comma separated or JSON string
     genderPreference: positionGenderEnum("gender_preference").default("All").notNull(),
     // applicationDeadline: date("application_deadline"),
-    isRemote: boolean("is_remote").default(false).notNull(),
+    // isRemote: boolean("is_remote").default(false).notNull(),
+    jobType: jobTypeEnum("job_type").default("On Site").notNull(),
     stateName: varchar("state_name", { length: 128 }),
     countryName: varchar("country_name", { length: 128 }),
     companyName: varchar("company_name", { length: 128 }),

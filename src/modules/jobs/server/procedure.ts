@@ -14,14 +14,14 @@ export const jobRouter = createTRPCRouter({
     }).optional()
   ).query(async ({ input }) => {
     const { search = "", sortBy = "createdAt", sortOrder = "desc" } = input || {};
-  
+
     const sortField = {
       title: jobs.title,
       createdAt: jobs.createdAt,
     }[sortBy];
-  
+
     const orderClause = sortOrder === "asc" ? asc(sortField) : desc(sortField);
-  
+
     const job = await db
       .select()
       .from(jobs)
@@ -32,11 +32,11 @@ export const jobRouter = createTRPCRouter({
         )
       )
       .orderBy(orderClause);
-  
+
     if (!job) {
       throw new TRPCError({ code: "NOT_FOUND", message: "Job not found" });
     }
-  
+
     return job;
   }),
   createJob: companyProcedure
@@ -46,12 +46,13 @@ export const jobRouter = createTRPCRouter({
       const job = await db.insert(jobs).values({
         ...input,
         hardSkills: input.hardSkills
-        ?.map((s) => s.trim())
-        .filter((s) => s.length > 0),
-      softSkills: input.softSkills
-        ?.map((s) => s.trim())
-        .filter((s) => s.length > 0),
+          ?.map((s) => s.trim())
+          .filter((s) => s.length > 0),
+        softSkills: input.softSkills
+          ?.map((s) => s.trim())
+          .filter((s) => s.length > 0),
         companyId: id,
+        companyName: ctx.user.companyName,
       });
       return job;
     }),
@@ -62,11 +63,11 @@ export const jobRouter = createTRPCRouter({
       const job = await db.update(jobs).set({
         ...input,
         hardSkills: input.hardSkills
-        ?.map((s) => s.trim())
-        .filter((s) => s.length > 0),
-      softSkills: input.softSkills
-        ?.map((s) => s.trim())
-        .filter((s) => s.length > 0),
+          ?.map((s) => s.trim())
+          .filter((s) => s.length > 0),
+        softSkills: input.softSkills
+          ?.map((s) => s.trim())
+          .filter((s) => s.length > 0),
       }).where(eq(jobs.companyId, id));
       return job;
     }),
@@ -129,66 +130,66 @@ export const jobRouter = createTRPCRouter({
       console.log(job);
       return job;
     }),
-    getFavoriteJobIds: candidateProcedure.query(async ({ ctx }) => {
-      const { id } = ctx.user;
-    
-      const favorites = await db
-        .select({ jobId: jobFavorites.jobId })
-        .from(jobFavorites)
-        .innerJoin(jobs, eq(jobFavorites.jobId, jobs.id))
-        .where(
-          and(
-            eq(jobFavorites.candidateId, id),
-            eq(jobs.isPublished, true)
-          )
-        );
-    
-      return favorites.map((f) => f.jobId);
-    }),
-  
-    isFavoriteJob: candidateProcedure.input(z.object({ jobId: z.string() })).query(async ({ ctx, input }) => {
-      const candidateId = ctx.user.id;
+  getFavoriteJobIds: candidateProcedure.query(async ({ ctx }) => {
+    const { id } = ctx.user;
 
-      const fav = await db.select().from(jobFavorites).innerJoin(jobs, eq(jobFavorites.jobId, jobs.id)).where(and(
-        eq(jobFavorites.jobId, input.jobId),
-        eq(jobFavorites.candidateId, candidateId),
-        eq(jobs.isPublished, true)
-      ));
-      console.log("favorite jobs", fav);
-      return { isFavorite: fav.length > 0 };
-    }),
-  
-    toggleFavoriteJob: candidateProcedure.input(z.object({ jobId: z.string() })).mutation(async ({ ctx, input }) => {
-      const { id } = ctx.user;
-      const { jobId } = input;
-      // Check if favorite exists
-      const existing = await db
-        .select()
-        .from(jobFavorites)
+    const favorites = await db
+      .select({ jobId: jobFavorites.jobId })
+      .from(jobFavorites)
+      .innerJoin(jobs, eq(jobFavorites.jobId, jobs.id))
+      .where(
+        and(
+          eq(jobFavorites.candidateId, id),
+          eq(jobs.isPublished, true)
+        )
+      );
+
+    return favorites.map((f) => f.jobId);
+  }),
+
+  isFavoriteJob: candidateProcedure.input(z.object({ jobId: z.string() })).query(async ({ ctx, input }) => {
+    const candidateId = ctx.user.id;
+
+    const fav = await db.select().from(jobFavorites).innerJoin(jobs, eq(jobFavorites.jobId, jobs.id)).where(and(
+      eq(jobFavorites.jobId, input.jobId),
+      eq(jobFavorites.candidateId, candidateId),
+      eq(jobs.isPublished, true)
+    ));
+    console.log("favorite jobs", fav);
+    return { isFavorite: fav.length > 0 };
+  }),
+
+  toggleFavoriteJob: candidateProcedure.input(z.object({ jobId: z.string() })).mutation(async ({ ctx, input }) => {
+    const { id } = ctx.user;
+    const { jobId } = input;
+    // Check if favorite exists
+    const existing = await db
+      .select()
+      .from(jobFavorites)
+      .where(and(
+        eq(jobFavorites.jobId, jobId),
+        eq(jobFavorites.candidateId, id)
+      ))
+      .limit(1)
+
+    if (existing.length > 0) {
+      // Remove from favorites
+      await db
+        .delete(jobFavorites)
         .where(and(
           eq(jobFavorites.jobId, jobId),
           eq(jobFavorites.candidateId, id)
         ))
-        .limit(1)
-
-      if (existing.length > 0) {
-        // Remove from favorites
-        await db
-          .delete(jobFavorites)
-          .where(and(
-            eq(jobFavorites.jobId, jobId),
-            eq(jobFavorites.candidateId, id)
-          ))
-        return { isFavorite: false }
-      } else {
-        // Add to favorites
-        await db.insert(jobFavorites).values({
-          jobId,
-          candidateId: id
-        })
-        return { isFavorite: true }
-      }
-    }),
+      return { isFavorite: false }
+    } else {
+      // Add to favorites
+      await db.insert(jobFavorites).values({
+        jobId,
+        candidateId: id
+      })
+      return { isFavorite: true }
+    }
+  }),
   getJobApplicationsByJobId: candidateProcedure
     .input(z.object({ jobId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -209,19 +210,19 @@ export const jobRouter = createTRPCRouter({
       const job = await db.update(jobs).set({ isPublished: status === "ACTIVE" }).where(and(eq(jobs.id, jobId), eq(jobs.companyId, id)));
       return job;
     }),
-    toggleJobApplication: candidateProcedure
+  toggleJobApplication: candidateProcedure
     .input(z.object({ jobId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { id } = ctx.user;
       const { jobId } = input;
-  
+
       if (!ctx.user.defaultResumeId) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Default resume not found",
         });
       }
-  
+
       const existing = await db
         .select()
         .from(jobApplications)
@@ -231,17 +232,17 @@ export const jobRouter = createTRPCRouter({
             eq(jobApplications.candidateId, id)
           )
         );
-  
+
       if (existing.length > 0) {
         const application = existing[0];
-  
+
         if (application.applicationStatus !== "PENDING") {
           throw new TRPCError({
             code: "BAD_REQUEST",
             message: "You can only remove pending applications",
           });
         }
-  
+
         await db
           .delete(jobApplications)
           .where(
@@ -250,7 +251,7 @@ export const jobRouter = createTRPCRouter({
               eq(jobApplications.candidateId, id)
             )
           );
-  
+
         return { message: "Application Removed Successfully!" };
       } else {
         await db.insert(jobApplications).values({
@@ -258,7 +259,7 @@ export const jobRouter = createTRPCRouter({
           candidateId: id,
           resumeId: ctx.user.defaultResumeId,
         });
-  
+
         return { message: "Application Added Successfully!" };
       }
     }),

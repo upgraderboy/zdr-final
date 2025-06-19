@@ -52,8 +52,8 @@ export default function JobAnalyticsDashboard() {
           case "genderPreference":
             if (!selectedValues.includes(job.genderPreference)) return false
             break
-          case "isRemote":
-            if (!selectedValues.includes(job.isRemote ? "Remote" : "On-site")) return false
+          case "jobType":
+            if (!selectedValues.includes(job.jobType)) return false
             break
           case "isDisabilityAllowed":
             if (!selectedValues.includes(job.isDisabilityAllowed ? "Yes" : "No")) return false
@@ -102,8 +102,8 @@ export default function JobAnalyticsDashboard() {
           case "domainType":
             columnValue = job.domainType.toLowerCase()
             break
-          case "isRemote":
-            columnValue = job.isRemote ? "yes" : "no"
+          case "jobType":
+            columnValue = job.jobType.toLowerCase()
             break
           case "isDisabilityAllowed":
             columnValue = job.isDisabilityAllowed ? "yes" : "no"
@@ -137,7 +137,7 @@ export default function JobAnalyticsDashboard() {
   // Calculate summary statistics
   const summaryStats: SummaryStats = useMemo(() => {
     const uniqueCompanies = new Set(filteredJobs.map((job) => job.companyName)).size
-    const remoteJobs = filteredJobs.filter((job) => job.isRemote).length
+    const remoteJobs = filteredJobs.filter((job) => job.jobType === "Remote").length
     const disabilityFriendlyJobs = filteredJobs.filter((job) => job.isDisabilityAllowed).length
 
     // Calculate actual average salary
@@ -202,11 +202,10 @@ export default function JobAnalyticsDashboard() {
   }, [filteredJobs])
 
   const remoteData = useMemo(() => {
-    const remote = filteredJobs.filter((job) => job.isRemote).length
-    const onsite = filteredJobs.length - remote
     return [
-      { name: "Remote", value: remote },
-      { name: "On-site", value: onsite },
+      { name: "Remote", value: filteredJobs.filter((job) => job.jobType === "Remote").length },
+      { name: "On-site", value: filteredJobs.filter((job) => job.jobType === "On Site").length },
+      { name: "Hybrid", value: filteredJobs.filter((job) => job.jobType === "Hybrid").length }
     ]
   }, [filteredJobs])
 
@@ -284,7 +283,7 @@ export default function JobAnalyticsDashboard() {
           job.experienceLevel,
           `"${job.salaryRange || ""}"`,
           `"${job.stateName || ""}"`,
-          job.isRemote ? "Yes" : "No",
+          job.jobType,
           job.isDisabilityAllowed ? "Yes" : "No",
         ].join(","),
       ),
@@ -520,11 +519,11 @@ export default function JobAnalyticsDashboard() {
           </CardContent>
         </Card>
 
-        {/* Remote vs On-site Chart */}
+        {/* Remote vs On-site vs Hybrid Chart */}
         <Card>
           <CardHeader>
             <CardTitle>Work Location</CardTitle>
-            <CardDescription>Remote vs On-site opportunities</CardDescription>
+            <CardDescription>Remote vs On-site vs Hybrid opportunities</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="w-full overflow-hidden">
@@ -542,14 +541,14 @@ export default function JobAnalyticsDashboard() {
                       cy="50%"
                       outerRadius={80}
                       dataKey="value"
-                      onClick={(data) => handleChartClick("isRemote", data.name)}
+                      onClick={(data) => handleChartClick("jobType", data.name)}
                     >
                       {remoteData.map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
                           fill={COLORS[index + 2]}
-                          stroke={selectedChartData.isRemote?.includes(entry.name) ? "#000" : "none"}
-                          strokeWidth={selectedChartData.isRemote?.includes(entry.name) ? 2 : 0}
+                          stroke={selectedChartData.jobType?.includes(entry.name) ? "#000" : "none"}
+                          strokeWidth={selectedChartData.jobType?.includes(entry.name) ? 2 : 0}
                           style={{ cursor: "pointer" }}
                         />
                       ))}
@@ -791,8 +790,8 @@ export default function JobAnalyticsDashboard() {
                       <div className="p-1">Remote</div>
                       <Input
                         placeholder="yes/no"
-                        value={columnSearches.isRemote || ""}
-                        onChange={(e) => handleColumnSearch("isRemote", e.target.value)}
+                        value={columnSearches.jobType || ""}
+                        onChange={(e) => handleColumnSearch("jobType", e.target.value)}
                         className="h-8 text-xs"
                       />
                     </div>
@@ -827,7 +826,7 @@ export default function JobAnalyticsDashboard() {
                     <TableCell>{job.salaryRange || "Not specified"}</TableCell>
                     <TableCell>{job.stateName || "Not specified"}</TableCell>
                     <TableCell>
-                      <Badge variant={job.isRemote ? "default" : "outline"}>{job.isRemote ? "Yes" : "No"}</Badge>
+                      <Badge variant={job.jobType === "Remote" ? "default" : "outline"}>{job.jobType}</Badge>
                     </TableCell>
                     <TableCell>
                       <Badge variant={job.isDisabilityAllowed ? "default" : "outline"}>

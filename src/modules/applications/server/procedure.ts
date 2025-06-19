@@ -137,7 +137,7 @@ export const applicationRouter = createTRPCRouter({
         softSkills: job.softSkills ?? [],
         hardSkills: job.hardSkills ?? [],
         salaryRange: job.salaryRange ?? undefined,
-        isRemote: job.isRemote ?? false,
+        jobType: job.jobType ?? "On Site",
         stateName: job.stateName ?? "",
         countryName: job.countryName ?? "",
         companyName: job.companyName ?? "",

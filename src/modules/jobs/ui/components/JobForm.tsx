@@ -294,27 +294,26 @@ export default function JobForm({ initialData }: JobFormProps) {
           )}
         />
         </div>
-        {/* CheckBox for isRemote */}
+        {/* Put 3 choices - On Site, Remote, Hybrid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
-          name="isRemote"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Is Remote</FormLabel>
-              <FormControl>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                  <FormLabel>Is Remote</FormLabel>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormField control={form.control} name="jobType" render={({ field }) => (
+          <FormItem>
+            <FormLabel>Job Type *</FormLabel>
+            <FormControl>
+              <Select onValueChange={field.onChange} value={field.value || "On Site"}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Job Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="On Site">On Site</SelectItem>
+                  <SelectItem value="Remote">Remote</SelectItem>
+                  <SelectItem value="Hybrid">Hybrid</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
         {/* Add Salary */}
         <FormField
           control={form.control}

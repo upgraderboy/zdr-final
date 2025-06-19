@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSignUp } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
 } from '@/components/ui/form'
@@ -62,6 +62,10 @@ type FormSchema = z.infer<typeof rawFormSchema>
 
 export function RegisterForm({ className, ...props }: React.ComponentProps<'div'>) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const urlRole = searchParams.get('role')?.toUpperCase() === 'COMPANY' ? 'COMPANY' : 'CANDIDATE'
+
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const { isLoaded, signUp } = useSignUp()
@@ -69,11 +73,11 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      role: 'CANDIDATE',
+      role: urlRole,           // 👈 use URL param as default
       fullName: '',
       email: '',
       password: '',
-      companyName: '',     // Always needed because fields might switch
+      companyName: '',
       websiteUrl: '',
     } as FormSchema,
   })

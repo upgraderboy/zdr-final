@@ -49,7 +49,7 @@ export default function ApplicantsList() {
                     <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <MapPin className="h-4 w-4" />
-                        {job.isRemote ? "Remote" : `${job.stateName}, ${job.countryName}`}
+                        {job.jobType === "Remote" ? "Remote" : `${job.stateName}, ${job.countryName}`}
                       </div>
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
