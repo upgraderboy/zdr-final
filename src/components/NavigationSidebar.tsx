@@ -55,7 +55,7 @@ const defaultItems = [
 
 export const NavigationSidebar = ({ role, userId }: { role?: Roles; userId?: string }) => {
   return (
-    <Sidebar className="pt-16 z-40 border-none bg-white!" collapsible="icon">
+    <Sidebar className="pt-16 z-40 border-none" collapsible="icon">
       <SidebarContent>
         {role === "CANDIDATE" && (
           <SidebarGroup>
