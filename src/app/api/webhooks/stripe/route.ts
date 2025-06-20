@@ -105,7 +105,7 @@ export async function POST(req: Request) {
                         console.log(JSON.stringify(data, null, 2));
                     }
                 }
-
+                return new NextResponse("Checkout session handled", { status: 200 });
                 break;
             }
             case "customer.subscription.deleted": {
@@ -145,6 +145,7 @@ export async function POST(req: Request) {
                           onboardingComplete: true,
                       },
                   });
+                  return new NextResponse("Subscription deleted", { status: 200 });
                 break;
               }
             default:

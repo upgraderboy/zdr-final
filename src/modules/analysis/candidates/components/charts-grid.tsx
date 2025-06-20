@@ -42,7 +42,7 @@ export function ChartsGrid({ data, filters, onFilterChange }: ChartsGridProps) {
 
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
       <InteractiveChart
         title="Gender Distribution"
         data={chartData.gender}
@@ -102,6 +102,10 @@ export function ChartsGrid({ data, filters, onFilterChange }: ChartsGridProps) {
         activeFilters={filters.disability || []}
         onFilterChange={onFilterChange}
       />
+
+      <div className="absolute inset-0 bg-white/10 backdrop-blur-sm z-10 flex items-center justify-center">
+        <span className="text-gray-700 font-semibold">Subscribe To Get Premium Interactive Charts</span>
+      </div>
     </div>
   )
 }

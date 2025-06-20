@@ -61,7 +61,7 @@ export default function ProfileForm({ profile, isPending }: FormSectionProps) {
     const path = usePathname();
     const onboardingMutation = trpc.companies.onBoardingProfile.useMutation({
         onSuccess: () => {
-          router.refresh();
+          router.push("/");
           toast("Profile Updated!");
         },
         onError: () => {
@@ -79,7 +79,7 @@ export default function ProfileForm({ profile, isPending }: FormSectionProps) {
         },
       });
     
-      const mutation = path === "/companies/onboarding" ? onboardingMutation : updateMutation;
+      const mutation = path === "/onboarding" ? onboardingMutation : updateMutation;
 
 
 

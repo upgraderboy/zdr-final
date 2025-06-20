@@ -73,7 +73,7 @@ export default function PricingTable() {
           } else if (isSubscribed && isCurrentPlan && plan.key !== "FREE") {
             buttonContent = (
               <Button className="w-full bg-[#2B4356] hover:bg-[#2B4356]/80">
-                <Link href={billingPortalUrl || "#"}>Manage Billing</Link>
+                <Link target='_blank' href={billingPortalUrl || "#"}>Manage Billing</Link>
               </Button>
             )
           } else if (plan.key === "FREE") {
