@@ -4,6 +4,8 @@ import { useMemo } from "react"
 import { InteractiveChart } from "./interactive-chart"
 import type { ChartDataPoint, FilterState } from "./types"
 import { ResumeServerData } from "../../../../../types/globals"
+import { useAuth } from "@clerk/nextjs"
+import { cn } from "@/lib/utils"
 interface ChartsGridProps {
   data: ResumeServerData[]
   filters: FilterState
@@ -11,6 +13,8 @@ interface ChartsGridProps {
 }
 
 export function ChartsGrid({ data, filters, onFilterChange }: ChartsGridProps) {
+  const { sessionClaims } = useAuth();
+  const isSubscribed = sessionClaims?.metadata.isSubscribed === true
   const chartData = useMemo(() => {
     const createChartData = (field: string, getValue: (item: ResumeServerData) => string): ChartDataPoint[] => {
       const counts = data.reduce(
@@ -42,7 +46,7 @@ export function ChartsGrid({ data, filters, onFilterChange }: ChartsGridProps) {
 
 
   return (
-    <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8", !isSubscribed && "relative")}>
       <InteractiveChart
         title="Gender Distribution"
         data={chartData.gender}
@@ -103,9 +107,9 @@ export function ChartsGrid({ data, filters, onFilterChange }: ChartsGridProps) {
         onFilterChange={onFilterChange}
       />
 
-      <div className="absolute inset-0 bg-white/10 backdrop-blur-sm z-10 flex items-center justify-center">
+      {isSubscribed ? null : <div className="absolute inset-0 bg-white/10 backdrop-blur-sm z-10 flex items-center justify-center">
         <span className="text-gray-700 font-semibold">Subscribe To Get Premium Interactive Charts</span>
-      </div>
+      </div>}
     </div>
   )
 }
