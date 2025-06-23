@@ -6,8 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { useUser } from "@clerk/nextjs";
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from "@/components/ui/skeleton";
 import { CandidateWithResume } from "@/modules/candidates/server/procedure";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import ResumePreview from "@/modules/resumes/ui/ResumePreview";
@@ -15,8 +14,6 @@ import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
-import { sanitizeResume } from "@/lib/utils";
-import { CandidateAction } from "./CandidateAction";
 // import html2pdf from "html2pdf.js";
 export const CandidateCard = ({ candidate }: { candidate: CandidateWithResume }) => {
     return (
@@ -80,7 +77,6 @@ const CandidateCardSkeleton = () => {
     )
 }
 export default function CandidateCardSuspense({ candidate }: { candidate: CandidateWithResume }) {
-    const { user } = useUser();
     const contentRef = useRef<HTMLDivElement>(null);
 
     const reactToPrintFn = useReactToPrint({
@@ -90,13 +86,10 @@ export default function CandidateCardSuspense({ candidate }: { candidate: Candid
 
     return (
         <Dialog>
-            <DialogTrigger className="w-full">
-                <div className="w-full p-4 hover:bg-accent transition-colors cursor-pointer">
-                    <Card className="sticky top-8">
+            <DialogTrigger asChild>
+                <div className="w-full p-4 hover:bg-accent transition-colors cursor-pointer h-full">
+                    <Card className="flex flex-col h-full">
                         <CardHeader className="text-center pb-2 relative">
-                            {user?.unsafeMetadata.role === "COMPANY" && (
-                                <CandidateAction candidate={candidate} />
-                            )}
                             <div className="flex justify-center mb-4">
                                 <Avatar className="h-32 w-32 border-4" style={{ borderColor: candidate.resumeData?.colorHex || "#4f46e5" }}>
                                     <AvatarImage
@@ -115,7 +108,8 @@ export default function CandidateCardSuspense({ candidate }: { candidate: Candid
                             </CardTitle>
                             <CardDescription className="text-lg font-medium mt-1">{candidate.resumeData?.jobTitle}</CardDescription>
                         </CardHeader>
-                        <CardContent>
+
+                        <CardContent className="flex-grow">
                             <div className="space-y-4">
                                 {(candidate.resumeData?.city || candidate.resumeData?.country) && (
                                     <div className="flex items-center gap-3">
@@ -144,53 +138,41 @@ export default function CandidateCardSuspense({ candidate }: { candidate: Candid
 
                                 <Separator className="my-4" />
 
-                                {candidate.resumeData?.hardSkills && candidate.resumeData?.hardSkills.length > 0 && (
+                                {(candidate.resumeData?.hardSkills?.length || candidate.resumeData?.softSkills?.length) && (
                                     <div className="space-y-3">
                                         <h3 className="font-semibold text-lg flex items-center gap-2">
                                             <User className="h-5 w-5" />
                                             Skills
                                         </h3>
                                         <div className="flex flex-wrap gap-2">
-                                            {candidate.resumeData?.hardSkills?.map((skill, index) => {
-                                                if(index < 3){
-                                                    return <Badge key={index} variant="secondary" className="text-sm" style={{ backgroundColor: candidate.resumeData?.colorHex ? candidate.resumeData?.colorHex : undefined }}>
+                                            {candidate.resumeData?.hardSkills?.slice(0, 3).map((skill, index) => (
+                                                <Badge key={index} variant="secondary" className="text-sm" style={{ backgroundColor: candidate.resumeData?.colorHex || undefined }}>
                                                     {skill}
                                                 </Badge>
-                                                }
-                                            })}
-                                            {candidate.resumeData?.softSkills?.map((skill, index) => {
-                                                if(index < 3){
-                                                    return <Badge key={index} variant="secondary" className="text-sm" style={{ backgroundColor: candidate.resumeData?.colorHex ? candidate.resumeData?.colorHex : undefined }}>
+                                            ))}
+                                            {candidate.resumeData?.softSkills?.slice(0, 3).map((skill, index) => (
+                                                <Badge key={`soft-${index}`} variant="secondary" className="text-sm" style={{ backgroundColor: candidate.resumeData?.colorHex || undefined }}>
                                                     {skill}
                                                 </Badge>
-                                                }
-                                            })}
+                                            ))}
                                         </div>
                                     </div>
                                 )}
                             </div>
-                            <Separator className="my-4" />
                         </CardContent>
                     </Card>
                 </div>
             </DialogTrigger>
+
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader className="flex-row justify-between items-center sm:flex-row gap-4">
+                <DialogHeader className="flex-row justify-between items-center gap-4">
                     <DialogTitle>Resume Preview</DialogTitle>
-                    <div className="flex items-center gap-2">
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => {
-                                reactToPrintFn();
-                            }}
-                        >
-                            <Download className="h-4 w-4" />
-                        </Button>
-                    </div>
+                    <Button variant="outline" size="icon" onClick={reactToPrintFn}>
+                        <Download className="h-4 w-4" />
+                    </Button>
                 </DialogHeader>
                 {candidate.resumeData && (
-                    <ResumePreview contentRef={contentRef} resumeData={sanitizeResume(candidate.resumeData)} />
+                    <ResumePreview contentRef={contentRef} resumeData={candidate.resumeData} />
                 )}
             </DialogContent>
         </Dialog>

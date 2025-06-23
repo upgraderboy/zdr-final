@@ -1,22 +1,22 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
+import { SignedIn, SignedOut, useAuth, UserButton } from "@clerk/nextjs"
 import { useUser } from "@clerk/nextjs"
 
-import { usePathname } from "next/navigation"
 import { useState } from "react"
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { SignIn } from "@clerk/nextjs"
-
+import { DollarSign } from "lucide-react"
 export const AuthButton = () => {
-    const { isLoaded } = useUser()
-    const pathName = usePathname();
+    const { isLoaded } = useUser();
+    const { sessionClaims } = useAuth();
     const [open, setOpen] = useState(false);
     // !isSignedIn ? (
     //     <Skeleton className="px-12 py-6 text-sm font-medium text-blue-600 hover:text-blue-500 border-blue-500/20 rounded-full shadow-none [&_svg]:size-4 border" />
     // ) : 
+
     if (!isLoaded) {
         return (
             <>
@@ -34,11 +34,13 @@ export const AuthButton = () => {
             <SignedIn>
                 <UserButton>
                     {
-                        pathName !== "/candidates" && pathName !== "/companies" ? (
+                        sessionClaims?.metadata?.role === "COMPANY" ? (
                             <UserButton.MenuItems>
+                                <UserButton.Link href="/pricing-plan" label="Pricing Plan" labelIcon={<DollarSign />} />
                             </UserButton.MenuItems>
                         ) : (
                             <UserButton.MenuItems>
+                                <UserButton.Link href="/pricing-plan" label="Pricing Plan" labelIcon={<DollarSign />} />
                             </UserButton.MenuItems>
                         )
                     }
