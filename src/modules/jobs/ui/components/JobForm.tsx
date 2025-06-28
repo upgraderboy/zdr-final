@@ -19,6 +19,7 @@ import { ageOptions } from "@/types"
 import LoadingButton from "@/modules/resumes/ui/components/LoadingButton"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import LocationSelector from "@/components/ui/location-input"
 interface JobFormProps {
   initialData?: z.infer<typeof jobInsertSchema> & { id?: string }; // id optional for new record
 }
@@ -71,6 +72,8 @@ export default function JobForm({ initialData }: JobFormProps) {
       softSkills: [],
       hardSkills: [],
       salaryRange: "",
+      stateName: "",
+      companyName:"",
       companyId: "",
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -207,6 +210,33 @@ export default function JobForm({ initialData }: JobFormProps) {
             <FormMessage />
           </FormItem>
         )} />
+        {/*  CountryName and StateName */}
+
+        <FormField
+                            control={form.control}
+                            name="countryName" // <- this is required to get FormField working
+                            render={() => (
+                                <FormItem>
+                                    <FormLabel>Select Country & State</FormLabel>
+                                    <FormControl>
+                                        <LocationSelector
+                                            onCountryChange={(country) => {
+                                                form.setValue('countryName', country?.name || '')
+                                            }}
+                                            onStateChange={(state) => {
+                                                form.setValue('stateName', state?.name || '')
+                                            }}
+                                            initialCountryName={form.watch('countryName') || ''}
+                                            initialStateName={form.watch('stateName') || ''}
+                                        />
+                                    </FormControl>
+                                    <FormDescription>
+                                        If your country has states, it will appear after selecting country.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
         {/* Age Category */}
         <FormField control={form.control} name="ageCategory" render={({ field }) => (
           <FormItem>

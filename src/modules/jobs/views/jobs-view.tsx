@@ -39,7 +39,7 @@ export default function JobsView() {
                 />
 
                 <div className="w-full relative z-20 flex flex-col items-center text-center space-y-8 px-4">
-                    <h1 className="text-4xl md:text-5xl font-bold text-white">View Candidates</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white">View Jobs</h1>
                     <div className="max-w-2xl w-full relative flex items-center bg-white rounded-full overflow-hidden">
                         <Input
                             placeholder="Search companies..."

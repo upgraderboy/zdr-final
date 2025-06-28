@@ -340,7 +340,7 @@ export default function JobAnalyticsDashboard() {
       </Card>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Jobs</CardTitle>
@@ -381,7 +381,7 @@ export default function JobAnalyticsDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        {/* <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Avg. Salary</CardTitle>
             <Briefcase className="h-4 w-4 text-muted-foreground" />
@@ -389,7 +389,7 @@ export default function JobAnalyticsDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{summaryStats.averageSalary}</div>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
 
       {/* Active Filters */}

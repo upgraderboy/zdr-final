@@ -67,13 +67,13 @@ export function FavoriteCandidates() {
         <div className="">
             {/* 🔍 Search and Sort Controls */}
             <div className="relative h-[400px] flex items-center justify-center">
-                <div className="absolute inset-0 bg-black/50 z-10" />
+                <div className="absolute inset-0 bg-black/10 z-10" />
                 <Image
-                    src="/company_view_1.png"
+                    src="/View Candidates.jpg"
                     alt="Business professionals"
                     width={1000}
                     height={1000}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-fit"
                 />
 
                 <div className="w-full relative z-20 flex flex-col items-center text-center space-y-8 px-4">

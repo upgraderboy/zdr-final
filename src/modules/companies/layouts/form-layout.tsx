@@ -4,7 +4,7 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
   return (
     <>
       <div className="mx-auto px-4 py-8 md:px-8">
-        <h1 className="mb-8 text-2xl font-bold text-[#FF3B00]">Create Your Company&apos;s Account</h1>
+        <h1 className="mb-8 text-2xl font-bold text-[#FF3B00]">Update Your Company&apos;s Profile</h1>
         <div className="grid gap-8 md:grid-cols-2">
           {children}
           <div className="hidden md:block h-[70%]">

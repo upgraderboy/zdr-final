@@ -40,7 +40,7 @@ export const AuthButton = () => {
                             </UserButton.MenuItems>
                         ) : (
                             <UserButton.MenuItems>
-                                <UserButton.Link href="/pricing-plan" label="Pricing Plan" labelIcon={<DollarSign />} />
+                                {/* <UserButton.Link href="/pricing-plan" label="Pricing Plan" labelIcon={<DollarSign />} /> */}
                             </UserButton.MenuItems>
                         )
                     }

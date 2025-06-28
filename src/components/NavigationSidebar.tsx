@@ -21,6 +21,9 @@ import {
 } from "lucide-react";
 import { SidebarNavLink } from "./SidebarNavLink";
 import { Roles } from "../../types/globals";
+import { trpc } from "@/trpc/client"; // Adjust if your path is different
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 const candidateItems = [
   { title: "My Profile", href: "/profile", icon: User2Icon },
@@ -33,17 +36,6 @@ const candidateItems = [
   { title: "Jobs Analytics", href: "/analysis/jobs", icon: FileIcon },
 ];
 
-const companyItems = [
-  { title: "My Profile", href: "/profile", icon: LibraryIcon },
-  { title: "New Job", href: "/jobs/create", icon: FlameIcon },
-  { title: "Favorite Candidates", href: "/favorites", icon: Currency },
-  { title: "My Job Applications", href: "/applications", icon: FlameIcon },
-  { title: "All Candidates", href: "/candidates", icon: FileIcon },
-  { title: "All Jobs", href: "/jobs", icon: HeartIcon },
-  { title: "All Companies", href: "/companies", icon: FileIcon },
-  { title: "Candidate Analytics", href: "/analysis/candidates", icon: FileIcon },
-];
-
 const defaultItems = [
   { title: "Home", href: "/", icon: HomeIcon },
   { title: "About", href: "/about", icon: LibraryIcon },
@@ -54,8 +46,31 @@ const defaultItems = [
 ];
 
 export const NavigationSidebar = ({ role, userId }: { role?: Roles; userId?: string }) => {
+  const { data: company, isLoading } = trpc.companies.getProfile.useQuery(undefined, {
+    enabled: role === "COMPANY",
+  });
+  const pathname = usePathname();
+  const isCompanyProfilePage = /^\/companies\/[^/]+$/.test(pathname);
+  // While loading company data
+  if (role === "COMPANY" && isLoading) return null;
+
+  const companyItems = [
+    {
+      title: "My Profile",
+      href: company ? `/companies/${company.id}` : "/profile",
+      icon: LibraryIcon,
+    },
+
+    { title: "Favorite Candidates", href: "/favorites", icon: Currency },
+    { title: "My Job Applications", href: "/applications", icon: FlameIcon },
+    { title: "All Candidates", href: "/candidates", icon: FileIcon },
+    { title: "All Jobs", href: "/jobs", icon: HeartIcon },
+    { title: "All Companies", href: "/companies", icon: FileIcon },
+    { title: "Candidate Analytics", href: "/analysis/candidates", icon: FileIcon },
+  ];
+
   return (
-    <Sidebar className="pt-16 z-40 border-none" collapsible="icon">
+    <Sidebar className={cn("pt-16 z-40 border-none", isCompanyProfilePage && "justify-center items-center flex")} collapsible="icon">
       <SidebarContent>
         {role === "CANDIDATE" && (
           <SidebarGroup>
@@ -88,7 +103,7 @@ export const NavigationSidebar = ({ role, userId }: { role?: Roles; userId?: str
           </>
         )}
 
-        {role === "COMPANY" && (
+        {role === "COMPANY" && company && (
           <>
             <Separator />
             <SidebarGroup>
