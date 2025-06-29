@@ -72,6 +72,7 @@ export default function ProfileForm({ profile, isPending }: FormSectionProps) {
       const updateMutation = trpc.companies.updateProfile.useMutation({
         onSuccess: () => {
           router.refresh();
+          router.push("/");
           toast("Profile Updated!");
         },
         onError: () => {

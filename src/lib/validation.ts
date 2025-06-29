@@ -17,15 +17,31 @@ export const skillTypeEnum = z.enum(["TECH", "NON-TECH"]);
 
 export const personalInfoSchema = z.object({
   photoUrl: z.string().optional(),
-  firstName: optionalString,
-  lastName: optionalString,
-  jobTitle: optionalString,
-  summary: optionalString,
+  firstName: z.string().min(1, {
+    message: "Required"
+  }),
+  lastName: z.string().min(1, {
+    message: "Required"
+  }),
+  jobTitle: z.string().min(1, {
+    message: "Required"
+  }),
+  summary: z.string().min(1, {
+    message: "Required"
+  }),
   age: z.coerce.number().min(0).optional(),
-  city: optionalString,
-  country: optionalString,
-  phone: optionalString,
-  email: optionalString,
+  city: z.string().min(1, {
+    message: "Required"
+  }),
+  country: z.string().min(1, {
+    message: "Required"
+  }),
+  phone: z.string().min(1, {
+    message: "Required"
+  }),
+  email: z.string().min(1, {
+    message: "Required"
+  }),
   lat: optionalNumber,
   lng: optionalNumber,
   experienceLevel: experienceLevelEnum.optional(),
