@@ -56,20 +56,28 @@ export const jobRouter = createTRPCRouter({
       });
       return job;
     }),
-  updateJob: companyProcedure
+    updateJob: companyProcedure
     .input(jobUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id } = ctx.user;
-      const job = await db.update(jobs).set({
-        ...input,
-        hardSkills: input.hardSkills
-          ?.map((s) => s.trim())
-          .filter((s) => s.length > 0),
-        softSkills: input.softSkills
-          ?.map((s) => s.trim())
-          .filter((s) => s.length > 0),
-      }).where(eq(jobs.companyId, id));
-      return job;
+      const { id: companyId } = ctx.user;
+  
+      const { id: jobId, ...data } = input;
+      console.log(input)
+      const job = await db.update(jobs)
+        .set({
+          ...data,
+          hardSkills: data.hardSkills?.map((s) => s.trim()).filter((s) => s.length > 0),
+          softSkills: data.softSkills?.map((s) => s.trim()).filter((s) => s.length > 0),
+        })
+        .where(
+          and(
+            eq(jobs.id, jobId),        // Ensure we target the correct job
+            eq(jobs.companyId, companyId)  // Enforce company ownership
+          )
+        )
+        .returning();
+  
+      return job[0]; // if using returning()
     }),
   getJob: companyProcedure
     .input(z.object({ jobId: z.string() }))

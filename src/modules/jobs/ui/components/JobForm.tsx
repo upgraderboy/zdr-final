@@ -55,7 +55,7 @@ export default function JobForm({ initialData }: JobFormProps) {
     onSuccess: () => {
       utils.job.invalidate(); // refetch after update
       toast("Job successfully updated!");
-      router.push("/jobs")
+      // router.push("/jobs")
     },
   });
   const form = useForm<z.infer<typeof jobInsertSchema>>({

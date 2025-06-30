@@ -31,7 +31,7 @@ const plans = [
     price: "$19",
     billing: "per month",
     buttonText: "Subscribe Monthly",
-    paymentLink: process.env.STRIPE_MONTHLY_PLAN_LINK || "https://buy.stripe.com/test_8wM4ifak6gmQfo47ss",
+    paymentLink: process.env.STRIPE_MONTHLY_PLAN_LINK || "https://buy.stripe.com/test_dR66r6cgG8fgdLq8ww",
     features: ["Private company account", "Company's public page, accessible by registered candidates", "Environment with advanced analytics on registered candidates' profiles (with direct contact details)", "Advanced reporting tools for data visualization, analysis and extraction", "Possibility to cancel the next subscription the last day of the current month (UTC+1 during the winter/UTC+2 during the summer)"],
   },
   {
@@ -41,7 +41,7 @@ const plans = [
     price: "$199",
     billing: "per year",
     buttonText: "Subscribe Yearly",
-    paymentLink: process.env.STRIPE_YEARLY_PLAN_LINK || "https://buy.stripe.com/test_bIY9Cz8bY6Mgb7O5kl",
+    paymentLink: process.env.STRIPE_YEARLY_PLAN_LINK || "https://buy.stripe.com/test_fZe7va3Ka1QSbDieUV",
     features: ["Private company account", "Company's public page, accessible by registered candidates", "Company's job offers, accessible by registered candidates", "Environment with advanced analytics on registered candidates' profiles (with direct contact details)", " Advanced reporting tools for data visualization, analysis and extraction", "10% discount for the next renewal yearly subscription", "Possibility to cancel the next yearly subscription 3 months prior to the end date of the current paying plan"],
   },
 ]
