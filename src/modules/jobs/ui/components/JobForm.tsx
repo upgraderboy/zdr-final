@@ -18,7 +18,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ageOptions } from "@/types"
 import LoadingButton from "@/modules/resumes/ui/components/LoadingButton"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import LocationSelector from "@/components/ui/location-input"
 interface JobFormProps {
   initialData?: z.infer<typeof jobInsertSchema> & { id?: string }; // id optional for new record
@@ -79,7 +79,11 @@ export default function JobForm({ initialData }: JobFormProps) {
       updatedAt: new Date(),
     },
   })
-
+  useEffect(() => {
+    if (initialData) {
+      form.reset(initialData); // 👈 Reset with loaded data
+    }
+  }, [initialData, form]);
   const onSubmit = async (values: z.infer<typeof jobInsertSchema>) => {
     if (isEdit && initialData?.id) {
       await updateJob.mutateAsync({ ...values, id: initialData.id });
