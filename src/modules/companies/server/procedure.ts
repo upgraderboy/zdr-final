@@ -72,8 +72,8 @@ export const companyRouter = createTRPCRouter({
     await client.users.updateUser(ctx.user.clerkId, {
       publicMetadata: {
         onboardingComplete: true,
-        role: "COMPANY"
-      },
+        role: "COMPANY",
+      }
     })
     return company;
   }),

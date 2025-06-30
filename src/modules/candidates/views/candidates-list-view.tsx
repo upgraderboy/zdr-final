@@ -45,7 +45,7 @@ export default function CandidatesView() {
                     <div className="max-w-2xl w-full relative flex items-center bg-white rounded-full overflow-hidden">
                         <Input
                             placeholder="Search Candidates..."
-                            value={""}
+                            value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="flex-1 px-4 py-2 border-none outline-none rounded-none bg-white text-black"
                         />

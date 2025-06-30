@@ -34,13 +34,15 @@ import {
 import ImageUpload from "@/components/image-upload"
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import ResumePreviewSection from "@/modules/resumes/ui/components/ResumePreviewSection";
 
 import Footer from "@/modules/resumes/ui/components/Footer";
 import { closestCenter, DndContext, DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { GripHorizontal } from "lucide-react";
+import ColorPicker from "@/modules/resumes/ui/components/ColorPicker";
+import BorderStyleButton from "@/modules/resumes/ui/components/BorderStyleButton";
+import ResumePreview from "@/modules/resumes/ui/ResumePreview";
 
 
 
@@ -86,7 +88,7 @@ export const OnboardingSectionSuspense = () => {
     control: form.control,
     name: "workExperiences",
   });
-  
+
   const {
     fields: educationFields,
     append: appendEducation,
@@ -126,10 +128,10 @@ export const OnboardingSectionSuspense = () => {
         // Ensure softSkills and hardSkills contain only strings
         const cleanSoftSkills =
           (values.softSkills || []).filter((s): s is string => !!s?.trim());
-          const cleanHardSkills =
+        const cleanHardSkills =
           (values.hardSkills || []).filter((s): s is string => !!s?.trim());
-          
-          const newData: ResumeValues = {
+
+        const newData: ResumeValues = {
           ...prev,
           ...values,
           softSkills: cleanSoftSkills,
@@ -141,7 +143,7 @@ export const OnboardingSectionSuspense = () => {
         return JSON.stringify(prev) !== JSON.stringify(newData) ? newData : prev;
       });
     });
-    
+
     return () => subscription.unsubscribe?.();
   }, [form, setResumeData, watchedWorkExperiences, watchedEducations]);
   const { mutate: SaveResume } = trpc.candidates.onboarding.useMutation({
@@ -704,12 +706,36 @@ export const OnboardingSectionSuspense = () => {
               /> */}
             </div>
             <div className="grow md:border-r" />
-            <ResumePreviewSection
-              resumeData={resumeData}
-              setResumeData={setResumeData}
-              className={cn(showSmResumePreview && "flex")}
-            />
+            <div
+              className={cn("group relative hidden w-full md:flex md:w-1/2", cn(showSmResumePreview && "flex"))}
+            >
+              <div className="absolute right-1 top-1 translate-y-1/2 flex flex-none flex-col gap-3 opacity-50 transition-opacity group-hover:opacity-100 lg:right-3 lg:top-1/2 xl:opacity-100">
+                <ColorPicker
+                  color={resumeData.colorHex}
+                  onChange={(color) => {
+                    form.setValue('colorHex', color.hex)
+                    setResumeData({ ...resumeData, colorHex: color.hex })
+                  }
+                  }
+                />
+                <BorderStyleButton
+                  borderStyle={resumeData.borderStyle}
+                  onChange={(borderStyle) => {
+                    form.setValue('borderStyle', borderStyle)
+                    setResumeData({ ...resumeData, borderStyle })
+                  }
+                  }
+                />
+              </div>
+              <div className="flex w-full justify-center bg-secondary p-3">
+                <ResumePreview
+                  resumeData={resumeData}
+                  className="max-w-2xl shadow-md"
+                />
+              </div>
+            </div>
           </div>
+
         </main>
         <Footer
           // currentStep={currentStep}

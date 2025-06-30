@@ -19,7 +19,7 @@ const AboutPage = () => {
             <Image
               alt="Business meeting"
               className="object-cover w-full h-full"
-              src="/about.png"
+              src="/about.jpg"
               width={100}
               height={100}
             />

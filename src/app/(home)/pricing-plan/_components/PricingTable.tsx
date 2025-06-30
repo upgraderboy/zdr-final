@@ -91,22 +91,22 @@ export default function PricingTable() {
           }
 
           return (
-            <Card key={plan.name} className="flex flex-col text-center">
-              <CardHeader>
+            <Card key={plan.name} className="flex flex-col">
+              <CardHeader className="text-center">
                 <CardTitle>{plan.name}</CardTitle>
                 <CardDescription>{plan.description}</CardDescription>
               </CardHeader>
               <CardContent className="flex-grow">
-                <div className="text-4xl font-bold mb-2">
+                <div className="text-4xl font-bold mb-2 text-center">
                   {plan.price}
                   <span className="text-sm font-normal text-muted-foreground">/{plan.billing}</span>
                 </div>
                 <ul className="space-y-4 mb-4">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="w-fit mx-auto flex items-center text-justify">
-                      <Check className="mr-2 h-4 w-4 text-primary" />
-                      {feature}
-                    </li>
+                    <li key={feature} className="flex items-start gap-4">
+                    <Check className="mt-1 h-4 w-4 text-primary" />
+                    <span>{feature}</span>
+                  </li>
                   ))}
                 </ul>
               </CardContent>

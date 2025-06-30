@@ -19,10 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 
-import ResumePreviewSection from "./components/ResumePreviewSection";
-// import useAutoSaveResume from "@/lib/useAutoSaveResume";
 import Footer from "@/modules/resumes/ui/components/Footer";
-// import useUnloadWarning from "@/hooks/useUnloadWarning";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -43,6 +40,9 @@ import { Select, SelectContent, SelectItem, SelectValue } from "@/components/ui/
 import { Textarea } from "@/components/ui/textarea";
 import { PhoneInput } from "@/components/ui/phone-input";
 import ImageUpload from "@/components/image-upload";
+import ColorPicker from "./components/ColorPicker";
+import BorderStyleButton from "./components/BorderStyleButton";
+import ResumePreview from "./ResumePreview";
 
 
 
@@ -145,7 +145,7 @@ export const ResumeEditorSectionSuspense = ({ resumeId }: ResumeEditorProps) => 
       const { mutate: SaveResume } = trpc.resume.save.useMutation({
         onSuccess: () => {
           toast("Resume saved successfully");
-          router.push("/onboarding");
+          router.push("/resume");
         },
         onError: () => {
           toast("Resume save failed");
@@ -702,11 +702,34 @@ export const ResumeEditorSectionSuspense = ({ resumeId }: ResumeEditorProps) => 
               /> */}
             </div>
             <div className="grow md:border-r" />
-            <ResumePreviewSection
-              resumeData={resumeData}
-              setResumeData={setResumeData}
-              className={cn(showSmResumePreview && "flex")}
-            />
+            <div
+                  className={cn("group relative hidden w-full md:flex md:w-1/2", cn(showSmResumePreview && "flex"))}
+                >
+                  <div className="absolute right-1 top-1 translate-y-1/2 flex flex-none flex-col gap-3 opacity-50 transition-opacity group-hover:opacity-100 lg:right-3 lg:top-1/2 xl:opacity-100">
+                    <ColorPicker
+                      color={resumeData.colorHex}
+                      onChange={(color) =>{
+                        form.setValue('colorHex', color.hex)
+                        setResumeData({ ...resumeData, colorHex: color.hex })
+                      }
+                      }
+                    />
+                    <BorderStyleButton
+                      borderStyle={resumeData.borderStyle}
+                      onChange={(borderStyle) =>{
+                        form.setValue('borderStyle', borderStyle)
+                        setResumeData({ ...resumeData, borderStyle })
+                      }
+                      }
+                    />
+                  </div>
+                  <div className="flex w-full justify-center bg-secondary p-3">
+                    <ResumePreview
+                      resumeData={resumeData}
+                      className="max-w-2xl shadow-md"
+                    />
+                  </div>
+                </div>
           </div>
         </main>
       <Footer

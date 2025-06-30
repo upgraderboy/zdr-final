@@ -56,7 +56,7 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(new URL('/onboarding', req.url))
   }
 
-  // 🛡️ Enforce role-based dashboard access
+  // 🛡 Enforce role-based dashboard access
   if (userId && onboardingComplete === true) {
     if (isCandidateDashboard(req) && role !== 'CANDIDATE') {
       return NextResponse.redirect(new URL('/', req.url))
