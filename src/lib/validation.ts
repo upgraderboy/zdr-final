@@ -42,8 +42,6 @@ export const personalInfoSchema = z.object({
   email: z.string().min(1, {
     message: "Required"
   }),
-  lat: optionalNumber,
-  lng: optionalNumber,
   experienceLevel: experienceLevelEnum.optional(),
   contractType: contractTypeEnum.optional(),
   gender: genderEnum.optional(),
@@ -65,9 +63,7 @@ const workExperienceItemSchema = z
     startDate: z.string().min(1, {
       message: "Required"
     }),
-    endDate: z.string().min(1, {
-      message: "Required"
-    }),
+    endDate: z.string().optional(),
     description: z.string().min(1, {
       message: "Required"
     }),
@@ -101,9 +97,7 @@ const educationItemSchema = z
     startDate: z.string().min(1, {
       message: "Required"
     }),
-    endDate: z.string().min(1, {
-      message: "Required"
-    }),
+    endDate: z.string().optional(),
   })
   .refine(
     (data) => {

@@ -31,12 +31,12 @@ import { Input } from "@/components/ui/input";
 interface ResumeEditorProps {
   resumeId: string;
 }
-import { LocationPicker } from "@/modules/resumes/ui/LocationPicker";
+
 import { closestCenter, DndContext, DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { GripHorizontal } from "lucide-react";
-import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SelectTrigger } from "@radix-ui/react-select";
 import { Select, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
@@ -284,21 +284,6 @@ export const ResumeEditorSectionSuspense = ({ resumeId }: ResumeEditorProps) => 
                       </FormItem>
                     )} />
                   </div>
-
-                  {/* Location Picker */}
-                  <Controller name="lat" control={form.control} render={({ field: latField }) => (
-                    <Controller name="lng" control={form.control} render={({ field: lngField }) => (
-                      <LocationPicker
-                        className="w-full"
-                        apiKey={process.env.GOOGLE_MAPS_API_KEY!}
-                        value={{ lat: latField.value || 0, lng: lngField.value || 0 }}
-                        onValueChange={(val) => {
-                          latField.onChange(val?.lat);
-                          lngField.onChange(val?.lng);
-                        }}
-                      />
-                    )} />
-                  )} />
 
                   {/* Summary */}
                   <FormField name="summary" control={form.control} render={({ field }) => (

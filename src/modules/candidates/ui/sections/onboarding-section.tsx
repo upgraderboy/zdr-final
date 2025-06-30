@@ -1,7 +1,4 @@
 "use client";
-
-// import useUnloadWarning from "@/hooks/useUnloadWarning";
-
 import { cn, mapToResumeValues } from "@/lib/utils";
 import { resumeSchema, ResumeValues } from "@/lib/validation";
 import { useEffect, useState } from "react";
@@ -37,7 +34,6 @@ import {
 import ImageUpload from "@/components/image-upload"
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Controller } from "react-hook-form";
 import ResumePreviewSection from "@/modules/resumes/ui/components/ResumePreviewSection";
 
 import Footer from "@/modules/resumes/ui/components/Footer";
@@ -45,7 +41,7 @@ import { closestCenter, DndContext, DragEndEvent, KeyboardSensor, PointerSensor,
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { GripHorizontal } from "lucide-react";
-import { LocationPicker } from "@/modules/resumes/ui/LocationPicker";
+
 
 
 
@@ -123,7 +119,7 @@ export const OnboardingSectionSuspense = () => {
       moveEducation(oldIndex, newIndex);
     }
   };
-
+  console.log(form.formState.errors)
   useEffect(() => {
     const subscription = form.watch((values) => {
       setResumeData((prev) => {
@@ -150,8 +146,8 @@ export const OnboardingSectionSuspense = () => {
   }, [form, setResumeData, watchedWorkExperiences, watchedEducations]);
   const { mutate: SaveResume } = trpc.candidates.onboarding.useMutation({
     onSuccess: () => {
+      router.push("/");
       toast("Resume saved successfully");
-      router.push("/onboarding");
     },
     onError: () => {
       toast("Resume save failed");
@@ -289,20 +285,6 @@ export const OnboardingSectionSuspense = () => {
                     )} />
                   </div>
 
-                  {/* Location Picker */}
-                  <Controller name="lat" control={form.control} render={({ field: latField }) => (
-                    <Controller name="lng" control={form.control} render={({ field: lngField }) => (
-                      <LocationPicker
-                        className="w-full"
-                        apiKey={process.env.GOOGLE_MAPS_API_KEY!}
-                        value={{ lat: latField.value || 0, lng: lngField.value || 0 }}
-                        onValueChange={(val) => {
-                          latField.onChange(val?.lat);
-                          lngField.onChange(val?.lng);
-                        }}
-                      />
-                    )} />
-                  )} />
 
                   {/* Summary */}
                   <FormField name="summary" control={form.control} render={({ field }) => (

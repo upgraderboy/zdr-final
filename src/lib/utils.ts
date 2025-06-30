@@ -59,8 +59,6 @@ export function mapToResumeValues(data: ResumeServerData): ResumeValues {
     borderStyle: data.borderStyle,
     colorHex: data.colorHex,
     summary: data.summary || undefined,
-    lat: data.lat,
-    lng: data.lng,
     disability: data.disability || undefined,
     gender: data.gender || undefined,
     experienceLevel: data.experienceLevel || undefined,
@@ -102,8 +100,6 @@ export function sanitizeResume(resume: ResumeServerData): ResumeServerData {
     borderStyle: resume.borderStyle,
     colorHex: resume.colorHex,
     summary: resume.summary ?? undefined,
-    lat: resume.lat,
-    lng: resume.lng,
     // category: resume.category ?? undefined,
     disability: resume.disability ?? undefined,
     gender: resume.gender ?? undefined,
@@ -116,17 +112,17 @@ export function sanitizeResume(resume: ResumeServerData): ResumeServerData {
 export function isResumeComplete(input: ResumeServerData): boolean {
   const {
     firstName, lastName, jobTitle, summary, age, city, country, phone, email,
-    lat, lng, experienceLevel, contractType, gender, disability, skillType,
+    experienceLevel, contractType, gender, disability, skillType,
     softSkills, hardSkills, workExperiences, educations,
   } = input;
 
   const hasPersonalInfo = firstName && lastName && jobTitle && email && phone && city && country;
-  const hasLocation = typeof lat === 'number' && typeof lng === 'number';
+
   const hasSkills = softSkills?.length > 0 && hardSkills?.length > 0;
   const hasWork = workExperiences?.length > 0;
   const hasEdu = educations?.length > 0;
   const hasMeta = experienceLevel && contractType && gender && disability && skillType;
   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-  console.log(hasPersonalInfo, summary, hasLocation, age !== undefined, hasSkills, hasWork, hasEdu, hasMeta)
-  return Boolean(hasPersonalInfo && summary && hasLocation && age !== undefined && hasSkills && hasWork && hasEdu && hasMeta);
+  console.log(hasPersonalInfo, summary, age !== undefined, hasSkills, hasWork, hasEdu, hasMeta)
+  return Boolean(hasPersonalInfo && summary && age !== undefined && hasSkills && hasWork && hasEdu && hasMeta);
 }

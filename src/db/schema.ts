@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, uuid, timestamp, pgEnum, primaryKey, varchar, boolean, integer, doublePrecision } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, timestamp, pgEnum, primaryKey, varchar, boolean, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema, createUpdateSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -48,8 +48,6 @@ export const resumes = pgTable("resumes", {
     country: text("country"),
     phone: text("phone"),
     email: text("email"),
-    lat: doublePrecision("lat"),
-    lng: doublePrecision("lng"),
     category: text("category").default("TECH"),
     softSkills: text("soft_skills").array(),
     hardSkills: text("hard_skills").array(),
@@ -105,8 +103,6 @@ export const companies = pgTable("companies", {
     gender: varchar("gender", { length: 255 }),
     presentation: text("presentation"),
     countryName: varchar("country_name", { length: 255 }),
-    lat: doublePrecision("lat"),
-    lng: doublePrecision("lng"),
     stateName: varchar("state_name", { length: 255 }),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
@@ -156,8 +152,6 @@ export const jobs = pgTable("jobs", {
     companyId: uuid("company_id")
         .references(() => companies.id, { onDelete: "cascade" })
         .notNull(),
-    lat: doublePrecision("lat"),
-    lng: doublePrecision("lng"),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
@@ -254,9 +248,7 @@ export const companySchema = createUpdateSchema(companies, {
     gender: z.string(),
     firstName: z.string().min(1),
     lastName: z.string().min(1),
-    presentation: z.string(),
-    lat: z.number(),
-    lng: z.number(),
+    presentation: z.string()
 })
 export const jobInsertSchema = createInsertSchema(jobs, {
     companyId: z.string().optional(),

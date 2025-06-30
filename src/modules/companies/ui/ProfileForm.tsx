@@ -7,7 +7,6 @@ import {
     toast
 } from "sonner"
 import {
-    Controller,
     useForm
 } from "react-hook-form"
 import {
@@ -45,7 +44,6 @@ import {
 } from "@/components/ui/textarea"
 import { trpc } from "@/trpc/client"
 import { companySchema } from "@/db/schema"
-import { LocationPicker } from "@/modules/resumes/ui/LocationPicker"
 import Link from "next/link"
 
 
@@ -99,8 +97,7 @@ export default function ProfileForm({ profile, isPending }: FormSectionProps) {
                 countryName: "",
                 stateName: "",
                 logoUrl: "", // Ensure logoUrl is included
-                lat: 0,
-                lng: 0,
+
             };
         }
 
@@ -117,8 +114,6 @@ export default function ProfileForm({ profile, isPending }: FormSectionProps) {
             countryName: profile.countryName ?? "",
             stateName: profile.stateName ?? "",
             logoUrl: profile.logoUrl ?? null, // Handle logoUrl
-            lat: profile.lat ?? 0,
-            lng: profile.lng ?? 0,
         };
     }, [profile]);
     const form = useForm<z.infer<typeof companySchema>>({
@@ -183,32 +178,6 @@ export default function ProfileForm({ profile, isPending }: FormSectionProps) {
                     </div>
 
                 </div>
-                <Controller
-                    name="lat"
-                    control={form.control}
-                    render={({ field: latField }) => (
-                        <Controller
-                            name="lng"
-                            control={form.control}
-                            render={({ field: lngField }) => (
-                                <LocationPicker
-                                    className="w-full"
-                                    apiKey={process.env.GOOGLE_MAPS_API_KEY! || "AIzaSyCRh0XosbCfHfG6-VJMpnbfE7gy2VYE91o"}
-                                    value={
-                                        latField.value !== undefined && lngField.value !== undefined
-                                            ? { lat: latField.value, lng: lngField.value }
-                                            : undefined
-                                    }
-                                    defaultValue={profile?.lat && profile?.lng ? { lat: profile.lat, lng: profile.lng } : undefined}
-                                    onValueChange={(value) => {
-                                        latField.onChange(value?.lat);
-                                        lngField.onChange(value?.lng);
-                                    }}
-                                />
-                            )}
-                        />
-                    )}
-                />
                 <FormField control={form.control} name="sectorName"
                             render={({ field }) => (
                                 <FormItem>

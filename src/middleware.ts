@@ -1,8 +1,8 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
-const isCandidateDashboard = createRouteMatcher(['/candidates(.*)', '/resume(.*)', '/jobs(.*)'])
-const isCompanyDashboard = createRouteMatcher(['/companies(.*)', '/jobs(.*)', '/candidates(.*)', '/jobs(.*)'])
+const isCandidateDashboard = createRouteMatcher(['/candidates(.*)', '/resume(.*)'])
+const isCompanyDashboard = createRouteMatcher(['/companies(.*)', '/candidates(.*)'])
 
 const isOnboardingRoute = createRouteMatcher(['/onboarding'])
 
@@ -10,7 +10,8 @@ const isLoggedInPublicRoute = createRouteMatcher([
   '/dashboard(.*)',
   '/favorites(.*)',
   '/candidates(.*)',
-  '/companies(.*)'
+  '/companies(.*)',
+  '/jobs(.*)'
 ])
 
 export default clerkMiddleware(async (auth, req) => {

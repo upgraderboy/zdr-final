@@ -115,8 +115,6 @@ export const resumeRouter = createTRPCRouter({
       softSkills: resumeValues.softSkills
         ?.map((s) => s.trim())
         .filter((s) => s.length > 0),
-      lat: Number(resumeValues.lat),
-      lng: Number(resumeValues.lng),
       updatedAt: new Date(),
     };
     // console.log(id, existingResume)
@@ -303,7 +301,7 @@ export const resumeRouter = createTRPCRouter({
     // Step 2: Validate required fields
     const requiredFields: (keyof typeof resume)[] = [
       "firstName", "lastName", "jobTitle", "city", "country", "phone", "email",
-      "lat", "lng", "summary", "age", "skillType", "gender", "disability", "experienceLevel", "contractType", "softSkills", "hardSkills"
+      "summary", "age", "skillType", "gender", "disability", "experienceLevel", "contractType", "softSkills", "hardSkills"
     ];
 
     const missingField = requiredFields.find((field) => {

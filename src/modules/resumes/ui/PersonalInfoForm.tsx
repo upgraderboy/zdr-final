@@ -12,9 +12,8 @@ import { Input } from "@/components/ui/input";
 import { personalInfoSchema, PersonalInfoValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { EditorFormProps } from "../../../../types/globals";
-import { LocationPicker } from "./LocationPicker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,8 +35,6 @@ export default function PersonalInfoForm({
             summary: resumeData.summary || "",
             phone: resumeData.phone || "",
             email: resumeData.email || "",
-            lat: resumeData.lat || 0,
-            lng: resumeData.lng || 0,
             experienceLevel: resumeData.experienceLevel || undefined,
             contractType: resumeData.contractType || undefined,
             gender: resumeData.gender || undefined,
@@ -178,33 +175,7 @@ export default function PersonalInfoForm({
                             )}
                         />
                     </div>
-                    <Controller
-                        name="lat"
-                        control={form.control}
-                        render={({ field: latField }) => (
-                            <Controller
-                                name="lng"
-                                control={form.control}
-                                render={({ field: lngField }) => (
-                                    <LocationPicker
-                                        className="w-full"
-                                        apiKey={process.env.GOOGLE_MAPS_API_KEY! || "AIzaSyCRh0XosbCfHfG6-VJMpnbfE7gy2VYE91o"}
-                                        value={
-                                            latField.value != null && lngField.value != null &&
-                                                !isNaN(Number(latField.value)) && !isNaN(Number(lngField.value))
-                                                ? { lat: Number(latField.value), lng: Number(lngField.value) }
-                                                : undefined
-                                        }
-                                        defaultValue={resumeData.lat && resumeData.lng ? { lat: resumeData.lat, lng: resumeData.lng } : undefined}
-                                        onValueChange={(value) => {
-                                            latField.onChange(Number(value?.lat));
-                                            lngField.onChange(Number(value?.lng));
-                                        }}
-                                    />
-                                )}
-                            />
-                        )}
-                    />
+                    
                     {/* Add a Textarea for summary */}
 
                     <FormField

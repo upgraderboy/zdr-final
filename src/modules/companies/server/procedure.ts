@@ -65,8 +65,6 @@ export const companyRouter = createTRPCRouter({
       stateName: input.stateName,
       companyName: input.companyName,
       sectorName: input.sectorName,
-      lat: input.lat,
-      lng: input.lng,
       updatedAt: new Date()
     }).where(eq(companies.clerkId, ctx.user.clerkId)).returning();
     console.log(company)
@@ -102,8 +100,6 @@ export const companyRouter = createTRPCRouter({
       stateName: input.stateName,
       companyName: input.companyName,
       sectorName: input.sectorName,
-      lat: input.lat,
-      lng: input.lng,
       updatedAt: new Date()
     }).where(eq(companies.clerkId, ctx.user.clerkId)).returning();
     return company;

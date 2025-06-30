@@ -107,7 +107,5 @@ const ProfileFormSectionSuspense = () => {
         presentation: profile.presentation ?? "",
         websiteUrl: profile.websiteUrl ?? "",
         logoUrl: profile.logoUrl ?? "",
-        lat: profile.lat ?? 0,
-        lng: profile.lng ?? 0,
     }} isPending={isPending} />
 }

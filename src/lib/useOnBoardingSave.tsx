@@ -52,8 +52,6 @@ export default function useAutoSaveResume(resumeData: ResumeValues) {
             ...(JSON.stringify(lastSavedData.photoUrl, fileReplacer) ===
               JSON.stringify(newData.photoUrl, fileReplacer) && {
               photoUrl: undefined,
-              lat: Number(newData.lat),
-              lng: Number(newData.lng)
             }),
             id: resumeId
           });

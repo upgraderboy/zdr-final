@@ -60,8 +60,6 @@ export const candidatesRouter = createTRPCRouter({
 
     const resumeData = {
       ...resumeValues,
-      lat: Number(resumeValues.lat),
-      lng: Number(resumeValues.lng),
       updatedAt: new Date(),
     };
     // console.log(id, existingResume)
