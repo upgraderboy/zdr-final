@@ -2,7 +2,7 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
 const isCandidateDashboard = createRouteMatcher(['/resume(.*)'])
-const isCompanyDashboard = createRouteMatcher(['/candidates(.*)'])
+const isCompanyDashboard = createRouteMatcher([])
 
 const isOnboardingRoute = createRouteMatcher(['/onboarding'])
 

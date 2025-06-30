@@ -14,6 +14,8 @@ import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
+import { CandidateAction } from "./CandidateAction";
+import { useAuth } from "@clerk/nextjs";
 // import html2pdf from "html2pdf.js";
 export const CandidateCard = ({ candidate }: { candidate: CandidateWithResume }) => {
     return (
@@ -78,7 +80,7 @@ const CandidateCardSkeleton = () => {
 }
 export default function CandidateCardSuspense({ candidate }: { candidate: CandidateWithResume }) {
     const contentRef = useRef<HTMLDivElement>(null);
-
+    const { sessionClaims } = useAuth();
     const reactToPrintFn = useReactToPrint({
         contentRef,
         documentTitle: "Resume",
@@ -90,6 +92,11 @@ export default function CandidateCardSuspense({ candidate }: { candidate: Candid
                 <div className="w-full p-4 hover:bg-accent transition-colors cursor-pointer h-full">
                     <Card className="flex flex-col h-full">
                         <CardHeader className="text-center pb-2 relative">
+                            {
+                                sessionClaims?.metadata.role === "COMPANY" && (
+                                    <CandidateAction candidate={candidate} />
+                                )
+                            }
                             <div className="flex justify-center mb-4">
                                 <Avatar className="h-32 w-32 border-4" style={{ borderColor: candidate.resumeData?.colorHex || "#4f46e5" }}>
                                     <AvatarImage
