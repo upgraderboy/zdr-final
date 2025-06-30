@@ -146,6 +146,7 @@ export const OnboardingSectionSuspense = () => {
   }, [form, setResumeData, watchedWorkExperiences, watchedEducations]);
   const { mutate: SaveResume } = trpc.candidates.onboarding.useMutation({
     onSuccess: () => {
+      router.refresh();
       router.push("/");
       toast("Resume saved successfully");
     },
