@@ -73,6 +73,7 @@ export const companyRouter = createTRPCRouter({
       publicMetadata: {
         onboardingComplete: true,
         role: "COMPANY",
+        image_url: logoUrl
       }
     })
     return company;
@@ -102,6 +103,14 @@ export const companyRouter = createTRPCRouter({
       sectorName: input.sectorName,
       updatedAt: new Date()
     }).where(eq(companies.clerkId, ctx.user.clerkId)).returning();
+    const client = await clerkClient()
+    await client.users.updateUser(ctx.user.clerkId, {
+      publicMetadata: {
+        onboardingComplete: true,
+        role: "COMPANY",
+        image_url: logoUrl
+      }
+    })
     return company;
   }),
   toggleFavorite: companyProcedure
